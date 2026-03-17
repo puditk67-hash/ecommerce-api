@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>E-commerce</title>
+</head>
+<body>
+  <h1>Customer List</h1>
+  <button onclick="loadData()">Load Customers</button>
+  <pre id="result"></pre>
+
+  <script>
+    async function loadData() {
+      const res = await fetch('https://ecommerce-api-theta-nine.vercel.app/api/customers');
+      const data = await res.json();
+      document.getElementById('result').innerText = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>

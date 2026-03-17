@@ -11,15 +11,9 @@ const pool = mysql.createPool({
 
 module.exports = async (req, res) => {
   try {
-    // ✅ แก้ตรงนี้ (customers มี s)
-    if (req.method === 'GET' && req.url === '/api/customers') {
-      const [rows] = await pool.query('SELECT * FROM customers');
-      return res.status(200).json(rows);
-    }
-
-    return res.status(404).json({ message: 'Not found' });
-
+    const [rows] = await pool.query('SELECT * FROM customers');
+    res.status(200).json(rows);
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    res.status(500).json({ error: err.message });
   }
 };
