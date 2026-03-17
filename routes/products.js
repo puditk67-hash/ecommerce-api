@@ -2,34 +2,28 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
+// SEED
+async function seedProducts() {
+  const [rows] = await db.query('SELECT COUNT(*) as count FROM products');
+  if (rows[0].count === 0) {
+    await db.query(`
+      INSERT INTO products (name, price, stock) VALUES
+      ('Laptop', 1000, 10),
+      ('Phone', 500, 20),
+      ('Headphones', 100, 50)
+    `);
+  }
+}
+
 // GET ALL
 router.get('/', async (req, res) => {
-  const [rows] = await db.query('SELECT * FROM products');
-  res.json(rows);
-});
-
-// GET BY ID
-router.get('/:id', async (req, res) => {
-  const [rows] = await db.query('SELECT * FROM products WHERE id = ?', [req.params.id]);
-  if (rows.length === 0) return res.status(404).json({ message: 'Not found' });
-  res.json(rows[0]);
-});
-
-// POST
-router.post('/', async (req, res) => {
-  const { name, price, stock } = req.body;
-  const [result] = await db.query(
-    'INSERT INTO products (name, price, stock) VALUES (?, ?, ?)',
-    [name, price, stock]
-  );
-  res.status(201).json({ id: result.insertId, name, price, stock });
-});
-
-// DELETE
-router.delete('/:id', async (req, res) => {
-  const [result] = await db.query('DELETE FROM products WHERE id = ?', [req.params.id]);
-  if (result.affectedRows === 0) return res.status(404).json({ message: 'Not found' });
-  res.json({ message: 'Deleted' });
+  try {
+    await seedProducts();
+    const [rows] = await db.query('SELECT * FROM products');
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;
