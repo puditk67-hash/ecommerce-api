@@ -2,18 +2,166 @@
 <html>
 <head>
   <title>E-commerce</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    nav a { margin-right: 15px; cursor: pointer; }
+    table { border-collapse: collapse; width: 100%; margin-top: 15px; }
+    th, td { border: 1px solid #333; padding: 8px; text-align: left; }
+    input { margin-right: 10px; padding: 5px; }
+    button { padding: 6px 12px; }
+  </style>
 </head>
 <body>
-  <h1>Customer List</h1>
-  <button onclick="loadData()">Load Customers</button>
-  <pre id="result"></pre>
 
-  <script>
-    async function loadData() {
-      const res = await fetch('https://ecommerce-api-theta-nine.vercel.app/api/customers');
-      const data = await res.json();
-      document.getElementById('result').innerText = JSON.stringify(data, null, 2);
-    }
-  </script>
+  <nav>
+    <a onclick="showPage('customers')">Customers</a>
+    <a onclick="showPage('products')">Products</a>
+    <a onclick="showPage('orders')">Orders</a>
+  </nav>
+
+  <h2 id="title">Customers</h2>
+
+  <div id="form"></div>
+  <div id="table"></div>
+
+<script>
+const API = "https://ecommerce-api-theta-nine.vercel.app/api";
+
+// 🔥 โหลดอัตโนมัติ
+window.onload = () => {
+  showPage("customers");
+};
+
+// ---------------- PAGE SWITCH ----------------
+function showPage(page) {
+  document.getElementById("title").innerText = page.toUpperCase();
+
+  if (page === "customers") loadCustomers();
+  if (page === "products") loadProducts();
+  if (page === "orders") loadOrders();
+}
+
+// ---------------- CUSTOMERS ----------------
+async function loadCustomers() {
+  document.getElementById("form").innerHTML = `
+    <input id="name" placeholder="Name">
+    <input id="email" placeholder="Email">
+    <button onclick="addCustomer()">Add</button>
+  `;
+
+  const res = await fetch(`${API}/customers`);
+  const data = await res.json();
+
+  let html = `<table>
+    <tr><th>id</th><th>name</th><th>email</th></tr>`;
+
+  data.forEach(c => {
+    html += `<tr>
+      <td>${c.id}</td>
+      <td>${c.name}</td>
+      <td>${c.email}</td>
+    </tr>`;
+  });
+
+  html += "</table>";
+  document.getElementById("table").innerHTML = html;
+}
+
+async function addCustomer() {
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+
+  await fetch(`${API}/customers`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email })
+  });
+
+  loadCustomers();
+}
+
+// ---------------- PRODUCTS ----------------
+async function loadProducts() {
+  document.getElementById("form").innerHTML = `
+    <input id="name" placeholder="Name">
+    <input id="price" placeholder="Price">
+    <input id="stock" placeholder="Stock">
+    <button onclick="addProduct()">Add</button>
+  `;
+
+  const res = await fetch(`${API}/products`);
+  const data = await res.json();
+
+  let html = `<table>
+    <tr><th>id</th><th>name</th><th>price</th><th>stock</th></tr>`;
+
+  data.forEach(p => {
+    html += `<tr>
+      <td>${p.id}</td>
+      <td>${p.name}</td>
+      <td>${p.price}</td>
+      <td>${p.stock}</td>
+    </tr>`;
+  });
+
+  html += "</table>";
+  document.getElementById("table").innerHTML = html;
+}
+
+async function addProduct() {
+  const name = document.getElementById("name").value;
+  const price = document.getElementById("price").value;
+  const stock = document.getElementById("stock").value;
+
+  await fetch(`${API}/products`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, price, stock })
+  });
+
+  loadProducts();
+}
+
+// ---------------- ORDERS ----------------
+async function loadOrders() {
+  document.getElementById("form").innerHTML = `
+    <input id="customer_id" placeholder="Customer ID">
+    <input id="total" placeholder="Total">
+    <button onclick="addOrder()">Add</button>
+  `;
+
+  const res = await fetch(`${API}/orders`);
+  const data = await res.json();
+
+  let html = `<table>
+    <tr><th>id</th><th>customer_id</th><th>total</th><th>status</th></tr>`;
+
+  data.forEach(o => {
+    html += `<tr>
+      <td>${o.id}</td>
+      <td>${o.customer_id}</td>
+      <td>${o.total}</td>
+      <td>${o.status}</td>
+    </tr>`;
+  });
+
+  html += "</table>";
+  document.getElementById("table").innerHTML = html;
+}
+
+async function addOrder() {
+  const customer_id = document.getElementById("customer_id").value;
+  const total = document.getElementById("total").value;
+
+  await fetch(`${API}/orders`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ customer_id, total, status: "placed" })
+  });
+
+  loadOrders();
+}
+</script>
+
 </body>
 </html>
