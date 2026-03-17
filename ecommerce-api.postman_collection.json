@@ -1,0 +1,122 @@
+{
+  "info": {
+    "name": "E-commerce API",
+    "_postman_id": "ecom-12345",
+    "description": "Test E-commerce API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3333"
+    }
+  ],
+  "item": [
+    {
+      "name": "Customers",
+      "item": [
+        {
+          "name": "Get All Customers",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/customers"
+          }
+        },
+        {
+          "name": "Get Customer By ID",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/customers/1"
+          }
+        },
+        {
+          "name": "Create Customer",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"John\",\"email\":\"john@mail.com\"}"
+            },
+            "url": "{{base_url}}/api/customers"
+          }
+        },
+        {
+          "name": "Delete Customer",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/customers/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Products",
+      "item": [
+        {
+          "name": "Get All Products",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/products"
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"Keyboard\",\"price\":1000,\"stock\":10}"
+            },
+            "url": "{{base_url}}/api/products"
+          }
+        },
+        {
+          "name": "Delete Product",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/products/1"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Orders",
+      "item": [
+        {
+          "name": "Get All Orders",
+          "request": {
+            "method": "GET",
+            "url": "{{base_url}}/api/orders"
+          }
+        },
+        {
+          "name": "Create Order",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"customer_id\":1,\"items\":[{\"product_id\":1,\"quantity\":1}]}"
+            },
+            "url": "{{base_url}}/api/orders"
+          }
+        },
+        {
+          "name": "Delete Order",
+          "request": {
+            "method": "DELETE",
+            "url": "{{base_url}}/api/orders/1"
+          }
+        }
+      ]
+    }
+  ]
+}
