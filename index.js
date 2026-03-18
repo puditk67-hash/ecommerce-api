@@ -46,6 +46,25 @@ app.get("/api/orders", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+// ===== PRODUCTS =====
+app.get("/api/products", async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM products");
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ===== ORDERS =====
+app.get("/api/orders", async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM orders");
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
 module.exports = (req, res) => {
   app(req, res);
 };
