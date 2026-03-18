@@ -4,9 +4,15 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(cors({
-  origin: "*" // 🔥 สำคัญมาก
-}));
+app.use(cors());
+
+// 🔥 FIX CORS (สำคัญ)
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  next();
+});
 
 app.use(express.json());
 
@@ -22,4 +28,6 @@ app.get('/', (req, res) => {
   res.json({ message: 'E-commerce API running' });
 });
 
-module.exports = app;
+module.exports = (req, res) => {
+  app(req, res);
+};
