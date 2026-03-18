@@ -3,7 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const pool = require('./db'); // 🔥 ต้องมี
+const pool = require('../db'); // 🔥 ต้องมี
 
 app.use(cors());
 
@@ -17,9 +17,9 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 // ===== ROUTES =====
-const customersRoute = require('./routes/customers');
-const productsRoute = require('./routes/products');
-const ordersRoute = require('./routes/orders');
+const customersRoute = require('../routes/customers');
+const productsRoute = require('../routes/products');
+const ordersRoute = require('../routes/orders');
 
 app.use('/api/customers', customersRoute);
 app.use('/api/products', productsRoute);
