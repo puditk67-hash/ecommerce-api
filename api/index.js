@@ -3,7 +3,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const pool = require('../db'); // 🔥 ต้องมี
+const pool = require('../db');
 
 app.use(cors());
 
@@ -21,15 +21,15 @@ const customersRoute = require('../routes/customers');
 const productsRoute = require('../routes/products');
 const ordersRoute = require('../routes/orders');
 
+// ✅ ต้องมีครบ 3 อัน
 app.use('/api/customers', customersRoute);
 app.use('/api/products', productsRoute);
 app.use('/api/orders', ordersRoute);
 
 // ===== TEST =====
 app.get('/', (req, res) => {
-  res.json({ message: 'E-commerce API running' });
+  res.json({ message: 'API running' });
 });
 
-module.exports = (req, res) => {
-  app(req, res);
-};
+// ✅ สำคัญมาก (Vercel)
+module.exports = app;
